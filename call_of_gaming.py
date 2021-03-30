@@ -3,9 +3,11 @@ import tkinter as tk
 import time
 import threading
 import tkinter.font as tkFont
+import random
 author = "@AuthoredEntropy"
 window = tk.Tk()
 window.geometry("400x75")
+window.iconbitmap(default='transparent.ico')
 window.title("")
 window.config(bg="#a8a8a8")
 def addVerticalSpacer(master, h,  color ="#a8a8a8"):
@@ -17,8 +19,15 @@ def addHorizontalSpacer(master, w, color ="#a8a8a8"):
     spacer.pack(side=tk.LEFT, fill="both")
 def denounceFunc(main,top):
     main.pack_forget()
-    youHaveDenounced = tk.Label(top, text="you have denounced gaming...\n goobye")
-    youHaveDenounced.place(relx=0.5, rely=0.5,anchor="center")
+    youHaveDenounced = tk.Label(top, text="you have denounced gaming... \n May God have mercy")
+    youHaveDenounced.place(relx=0.5, rely=0.3,anchor="center")
+    fontStyle = tkFont.Font(family="Lucida Grande", size=20)
+    timerLabel = tk.Label(top, text="Gaming will find you in:")
+    timerLabel.place(relx=0.5, rely=0.4,anchor="center")
+    timer = tk.Label(top, text="10", font=fontStyle)
+    timer.place(relx=0.5, rely=0.5,anchor="center")
+    x = threading.Thread(target=waitThenClose, args=(10,timer,timerLabel,youHaveDenounced,top,))
+    x.start()
 def callLoadLoop(label):
     while("calling" in label["text"]):
         if("..." in label["text"]):
@@ -39,10 +48,95 @@ def callFunc(main,top,msg):
     x.start()
     y = threading.Thread(target=waitThenStop, args=(youHaveCalled,msg,))
     y.start()
-
+def checkInt(num):
+    try:
+        int(num)
+    except:
+        return False
+    return True
+def funnyText(timer,top):
+    fontStyle = tkFont.Font(family="Lucida Grande", size=50)
+    timer.config(foreground="red", bg="black", font=fontStyle)
+    top.config(bg="black")
+    top.attributes("-fullscreen", True)
+    num = 0
+    while("gaming" in timer["text"]):
+        rand1 = random.uniform(-0.1, 0.1)
+        rand2 = random.uniform(-0.1, 0.1)
+        if(num%25 ==0):
+            rand1 = random.uniform(-0.3, 0.3)
+            rand2 = random.uniform(-0.3, 0.3)
+        timer.place_forget() 
+        timer.place(relx=0.5+rand1, rely=0.4+rand2,anchor="center")
+        time.sleep(.01)
+        num +=1
+        if(num > 500):
+            
+            timer.config(text="death")
+            time.sleep(.1)
+            top.attributes("-fullscreen", False)
+    y = threading.Thread(target=funnyText2, args=(timer,0.01,.4,.5,.1,))
+    y.start()
+    fontStyle2 = tkFont.Font(family="Lucida Grande", size=25)
+    smallerText = tk.Label(top, text="death", font=fontStyle2, foreground="red",bg="black")
+    smallerText.place(relx=0.2+rand1, rely=0.3+rand2,anchor="center")
+    smallerTextThread = threading.Thread(target=funnyText2, args=(smallerText,0.01,.2,.3,.1,))
+    smallerTextThread.start()
+    smallerText2 = tk.Label(top, text="death", font=fontStyle2, foreground="red",bg="black")
+    smallerText2.place(relx=0.2+rand1, rely=0.3+rand2,anchor="center")
+    smallerText3 = tk.Label(top, text="death", font=fontStyle2, foreground="red",bg="black")
+    smallerText3.place(relx=0.2+rand1, rely=0.3+rand2,anchor="center")
+    smallerTextThread2 = threading.Thread(target=funnyText2, args=(smallerText2,0.01,.6,.8,.1,))
+    smallerTextThread2.start()
+    smallerTextThread3 = threading.Thread(target=funnyText2, args=(smallerText3,0.01,.4,.8,.3,))
+    smallerTextThread3.start()
+    smallerText4 = tk.Label(top, text="death", font=fontStyle2, foreground="red",bg="black")
+    smallerText4.place(relx=0.2+rand1, rely=0.3+rand2,anchor="center")
+    smallerTextThread5 = threading.Thread(target=funnyText2, args=(smallerText4,0.01,.1,.8,.3, ))
+    smallerTextThread5.start()
+    time.sleep(10)
+    smallerText3.config(text="dead")
+    smallerText4.config(text="dead")
+    smallerText.config(text="dead")
+    smallerText2.config(text="dead")
+    timer.config(text="dead")
+    time.sleep(.1)
+    window.quit()
+def funnyText2(text,delay, startY,startX,mod):
+    num = 0
+    txtName = text["text"]
+    while(text["text"] ==txtName): 
+        rand1 = random.uniform(-mod, mod)
+        rand2 = random.uniform(-mod, mod)
+        if(num%25 ==0):
+            rand1 = random.uniform(-(mod*3), mod*3)
+            rand2 = random.uniform(-(mod*3), mod*3)
+        text.place_forget() 
+        text.place(relx=startX+rand1, rely=startY+rand2,anchor="center")
+        time.sleep(delay)
+        num +=1
+    return
+def stopWatch(timer,hide1,hide2,top):
+    while(int(timer["text"]) > 1):
+        timer.config(text=int(timer["text"])-1) 
+        time.sleep(1)
+    timer.place_forget() 
+    hide1.place_forget() 
+    hide2.place_forget() 
+    timer.place(relx=0.5, rely=0.4,anchor="center")
+    timer.config(text="gaming has found you")
+    y = threading.Thread(target=funnyText, args=(timer,top,))
+    y.start()
+def waitThenClose(t, timer, hide1,hide2,top):
+    timer.config(text=str(t))
+    if(checkInt(timer["text"])):
+        x = threading.Thread(target=stopWatch, args=(timer,hide1,hide2,top,))
+        x.start()
 def yesFunc():
     top = tk.Toplevel()
     top.geometry("400x350")
+    main =tk.Frame(top, width=350,height=400)
+    callFunc(main,top,"gaming has answered your call")
 def noFunc():
     top = tk.Toplevel()
     top.geometry("400x350")
